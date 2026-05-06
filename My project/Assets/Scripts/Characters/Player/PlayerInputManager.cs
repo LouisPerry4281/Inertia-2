@@ -1,11 +1,17 @@
-using System;
 using UnityEngine;
 
 public class PlayerInputManager : CharacterInputManager
 {
-    public PlayerInputManager instance;
+    public static PlayerInputManager instance;
+    
+    public PlayerManager player;
     
     private PlayerControls playerControls;
+    
+    [Header("Camera Movement Input")]
+    [SerializeField] private Vector2 cameraInput;
+    public float cameraVerticalInput;
+    public float cameraHorizontalInput;
     
     [Header("Player Movement Inputs")]
     private Vector2 movementInput;
@@ -27,9 +33,30 @@ public class PlayerInputManager : CharacterInputManager
 
     private void OnEnable()
     {
-        playerControls = new PlayerControls();
-        
-        playerControls.Player.Movement.performed += i => movementInput = i.ReadValue<Vector2>();
+        if (playerControls == null)
+        {
+            playerControls = new PlayerControls();
+
+            playerControls.PlayerMovement.Movement.performed += i => movementInput = i.ReadValue<Vector2>();
+            playerControls.PlayerMovement.Movement.canceled += i => movementInput = Vector2.zero;
+
+            playerControls.PlayerCamera.Movement.performed += i => cameraInput = i.ReadValue<Vector2>();
+            playerControls.PlayerCamera.Movement.canceled += i => cameraInput = Vector2.zero;
+            playerControls.PlayerCamera.Mouse.performed += i => cameraInput = i.ReadValue<Vector2>();
+            playerControls.PlayerCamera.Mouse.canceled += i => cameraInput = Vector2.zero;
+        }
+
+        playerControls.Enable();
+    }
+
+    private void OnDisable()
+    {
+        playerControls?.Disable();
+    }
+
+    private void OnDestroy()
+    {
+        playerControls?.Dispose();
     }
 
     private void Update()
@@ -53,6 +80,7 @@ public class PlayerInputManager : CharacterInputManager
 
     private void HandleCameraMovementInput()
     {
-        //camera input stuff
+        cameraVerticalInput = cameraInput.y;
+        cameraHorizontalInput = cameraInput.x;
     }
 }
