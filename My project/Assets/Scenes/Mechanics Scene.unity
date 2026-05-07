@@ -856,6 +856,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3826853471028321272, guid: c9416bafb6d96a743856edd933e58290, type: 3}
+      propertyPath: juiceDecayRate
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 8584979535021638939, guid: c9416bafb6d96a743856edd933e58290, type: 3}
       propertyPath: m_Name
       value: Player
@@ -890,6 +894,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2150436830541227446, guid: 068654c84211b424197ed0c3a2ca71ef, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -5
+      objectReference: {fileID: 0}
     - target: {fileID: 5312172971137282361, guid: 068654c84211b424197ed0c3a2ca71ef, type: 3}
       propertyPath: m_Name
       value: Player Camera (L+R)
