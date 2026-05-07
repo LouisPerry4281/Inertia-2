@@ -8,7 +8,8 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] private Transform cameraPivotTransform;
     
     [Header("Camera Settings")] 
-    private float cameraSmoothSpeed = 1; //The bigger the number, the slower the camera is to catch up to player
+    [SerializeField] private float cameraSmoothTime = 0.06f;
+    [SerializeField] private float cameraCollisionSmoothSpeed = 12f;
     [SerializeField] private float leftAndRightRotationSpeed = 220;
     [SerializeField] private float upAndDownRotationSpeed = 220;
     [SerializeField] private float minimumPivot = -30;
@@ -60,7 +61,7 @@ public class PlayerCamera : MonoBehaviour
 
     private void HandleFollowTarget()
     {
-        Vector3 targetCameraPosition = Vector3.SmoothDamp(transform.position, player.transform.position, ref cameraVelocity, cameraSmoothSpeed * Time.deltaTime);
+        Vector3 targetCameraPosition = Vector3.SmoothDamp(transform.position, player.transform.position, ref cameraVelocity, cameraSmoothTime);
         transform.position = targetCameraPosition;
     }
 
@@ -104,7 +105,9 @@ public class PlayerCamera : MonoBehaviour
             targetCameraZPosition = -cameraCollisionRadius;
         }
         
-        cameraObjectPosition.z = Mathf.Lerp(cameraObject.transform.localPosition.z, targetCameraZPosition, 0.2f);
+        float collisionSmoothAmount = 1f - Mathf.Exp(-cameraCollisionSmoothSpeed * Time.deltaTime);
+        cameraObjectPosition = cameraObject.transform.localPosition;
+        cameraObjectPosition.z = Mathf.Lerp(cameraObjectPosition.z, targetCameraZPosition, collisionSmoothAmount);
         cameraObject.transform.localPosition = cameraObjectPosition;
     }
 }

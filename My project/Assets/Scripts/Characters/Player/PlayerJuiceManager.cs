@@ -8,7 +8,7 @@ public class PlayerJuiceManager : MonoBehaviour
 
     [Header("Juice Amounts")]
     public float currentJuice = 50;
-    private float maxJuice = 100;
+    [SerializeField] private float maxJuice = 100;
     
     [Header("Juice Decay")]
     [SerializeField] private float juiceDecayRate = 0.5f;
@@ -78,7 +78,7 @@ public class PlayerJuiceManager : MonoBehaviour
     {
         if (!isDecaying)
             return;
-        print("decay tick");
+
         RemoveJuice(juiceDecayRate * Time.deltaTime);
     }
 

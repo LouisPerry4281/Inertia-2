@@ -239,9 +239,7 @@ MonoBehaviour:
   verticalMovement: 0
   horizontalMovement: 0
   moveAmount: 0
-  walkingSpeed: 2.5
-  runningSpeed: 4.5
-  sprintingSpeed: 7
+  baseMovementSpeed: 3
   rotationSpeed: 15
 --- !u!114 &3826853471028321272
 MonoBehaviour:
@@ -255,6 +253,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebd611bca4b1c4041b511afce0f37d82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  currentJuice: 50
+  maxJuice: 100
+  juiceDecayRate: 5
+  juiceDecayDelay: 3
 --- !u!143 &3237994317340214747
 CharacterController:
   m_ObjectHideFlags: 0

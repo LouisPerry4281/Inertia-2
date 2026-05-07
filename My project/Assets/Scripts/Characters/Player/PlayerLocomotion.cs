@@ -7,13 +7,12 @@ public class PlayerLocomotion : CharacterLocomotion
     public float verticalMovement;
     public float horizontalMovement;
     public float moveAmount;
+    private float finalMovementSpeed;
     
     [Header("Movement Settings")]
     private Vector3 moveDirection;
     private Vector3 targetRotationDirection;
-    [SerializeField] float walkingSpeed = 2;
-    [SerializeField] float runningSpeed = 5;
-    [SerializeField] float sprintingSpeed = 6.5f;
+    [SerializeField] float baseMovementSpeed = 5;
     [SerializeField] float rotationSpeed = 15;
     
     private void Awake()
@@ -50,7 +49,9 @@ public class PlayerLocomotion : CharacterLocomotion
         moveDirection.Normalize();
         moveDirection.y = 0;
         
-        player.characterController.Move(moveDirection * runningSpeed * Time.deltaTime);
+        finalMovementSpeed = ApplyJuiceToSpeed(baseMovementSpeed);
+        
+        player.characterController.Move(moveDirection * finalMovementSpeed * Time.deltaTime);
     }
 
     private void HandleRotation()
@@ -72,5 +73,14 @@ public class PlayerLocomotion : CharacterLocomotion
         Quaternion newRotation = Quaternion.LookRotation(targetRotationDirection);
         Quaternion targetRotation = Quaternion.Slerp(transform.rotation, newRotation, Time.deltaTime * rotationSpeed);
         transform.rotation = targetRotation;
+    }
+
+    private float ApplyJuiceToSpeed(float speed)
+    {
+        float juice = PlayerJuiceManager.instance.currentJuice;
+
+        speed *= (juice / 50) + baseMovementSpeed;
+        
+        return speed;
     }
 }
