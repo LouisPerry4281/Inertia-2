@@ -16,6 +16,11 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] private float maximumPivot = 60;
     [SerializeField] private float cameraCollisionRadius = 0.2f;
     [SerializeField] private LayerMask collideWithLayers;
+
+    [Header("Combat Feel")]
+    [SerializeField] private float defaultFieldOfView = 60f;
+    [SerializeField] private float fieldOfViewReturnSpeed = 10f;
+    [SerializeField] private float shakeReturnSpeed = 18f;
     
     [Header("Camera Values")]
     private Vector3 cameraVelocity; 
@@ -24,6 +29,10 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] private float upAndDownLookAngle;
     private float cameraZPosition; 
     private float targetCameraZPosition;
+    private Vector3 shakeOffset;
+    private Vector3 lastShakeOffset;
+    private float shakeTrauma;
+    private float fieldOfViewKick;
 
     private void Awake()
     {
@@ -47,6 +56,7 @@ public class PlayerCamera : MonoBehaviour
         }
         
         cameraZPosition = cameraObject.transform.localPosition.z;
+        defaultFieldOfView = cameraObject.fieldOfView;
     }
 
     public void HandleAllCameraActions()
@@ -55,8 +65,16 @@ public class PlayerCamera : MonoBehaviour
         {
             HandleFollowTarget();
             HandleRotations();
+            RemoveCombatImpulseOffset();
             HandleCollisions();
+            HandleCombatImpulse();
         }
+    }
+
+    public void AddCombatImpulse(float shakeAmount, float fovAmount)
+    {
+        shakeTrauma = Mathf.Clamp01(shakeTrauma + shakeAmount);
+        fieldOfViewKick = Mathf.Max(fieldOfViewKick, fovAmount);
     }
 
     private void HandleFollowTarget()
@@ -109,5 +127,39 @@ public class PlayerCamera : MonoBehaviour
         cameraObjectPosition = cameraObject.transform.localPosition;
         cameraObjectPosition.z = Mathf.Lerp(cameraObjectPosition.z, targetCameraZPosition, collisionSmoothAmount);
         cameraObject.transform.localPosition = cameraObjectPosition;
+    }
+
+    private void HandleCombatImpulse()
+    {
+        if (cameraObject == null)
+            return;
+
+        if (shakeTrauma > 0.001f)
+        {
+            float shakeStrength = shakeTrauma * shakeTrauma;
+            shakeOffset = new Vector3(
+                Random.Range(-shakeStrength, shakeStrength),
+                Random.Range(-shakeStrength, shakeStrength),
+                0f) * 0.18f;
+            shakeTrauma = Mathf.MoveTowards(shakeTrauma, 0f, shakeReturnSpeed * Time.unscaledDeltaTime);
+        }
+        else
+        {
+            shakeOffset = Vector3.zero;
+        }
+
+        fieldOfViewKick = Mathf.MoveTowards(fieldOfViewKick, 0f, fieldOfViewReturnSpeed * Time.unscaledDeltaTime);
+        cameraObject.fieldOfView = defaultFieldOfView + fieldOfViewKick;
+        cameraObject.transform.localPosition += shakeOffset;
+        lastShakeOffset = shakeOffset;
+    }
+
+    private void RemoveCombatImpulseOffset()
+    {
+        if (cameraObject == null || lastShakeOffset == Vector3.zero)
+            return;
+
+        cameraObject.transform.localPosition -= lastShakeOffset;
+        lastShakeOffset = Vector3.zero;
     }
 }

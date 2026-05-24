@@ -12,8 +12,14 @@ public class PlayerLocomotion : CharacterLocomotion
     [Header("Movement Settings")]
     private Vector3 moveDirection;
     private Vector3 targetRotationDirection;
-    [SerializeField] float baseMovementSpeed = 5;
-    [SerializeField] float rotationSpeed = 15;
+    [SerializeField] private float baseMovementSpeed = 5;
+    [SerializeField] private float maxJuiceMovementBonus = 2.2f;
+    [SerializeField] private float acceleration = 30f;
+    [SerializeField] private float rotationSpeed = 15;
+    [SerializeField] private float gravity = -24f;
+    [SerializeField] private float groundedVerticalVelocity = -2f;
+    private Vector3 currentVelocity;
+    private Vector3 verticalVelocity;
     
     private void Awake()
     {
@@ -25,8 +31,14 @@ public class PlayerLocomotion : CharacterLocomotion
         if (player.isPerformingAction)
             return;
 
+        HandleGravity();
         HandleGroundMovement();
         HandleRotation();
+    }
+
+    public void ResetVerticalVelocity()
+    {
+        verticalVelocity = Vector3.zero;
     }
     
     private void GetMovementValues()
@@ -50,8 +62,27 @@ public class PlayerLocomotion : CharacterLocomotion
         moveDirection.y = 0;
         
         finalMovementSpeed = ApplyJuiceToSpeed(baseMovementSpeed);
+        Vector3 targetVelocity = moveDirection * finalMovementSpeed;
+        currentVelocity = Vector3.MoveTowards(currentVelocity, targetVelocity, acceleration * Time.deltaTime);
         
-        player.characterController.Move(moveDirection * finalMovementSpeed * Time.deltaTime);
+        player.characterController.Move(currentVelocity * Time.deltaTime);
+    }
+
+    private void HandleGravity()
+    {
+        if (player.characterController == null)
+            return;
+
+        if (player.characterController.isGrounded && verticalVelocity.y < 0f)
+        {
+            verticalVelocity.y = groundedVerticalVelocity;
+        }
+        else
+        {
+            verticalVelocity.y += gravity * Time.deltaTime;
+        }
+
+        player.characterController.Move(verticalVelocity * Time.deltaTime);
     }
 
     private void HandleRotation()
@@ -77,9 +108,11 @@ public class PlayerLocomotion : CharacterLocomotion
 
     private float ApplyJuiceToSpeed(float speed)
     {
-        float juice = PlayerJuiceManager.instance.currentJuice;
+        if (PlayerJuiceManager.instance == null)
+            return speed;
 
-        speed *= (juice / 50) + baseMovementSpeed;
+        float juice = Mathf.Clamp(PlayerJuiceManager.instance.currentJuice, 0f, 100f);
+        speed += Mathf.Lerp(0f, maxJuiceMovementBonus, juice / 100f);
         
         return speed;
     }

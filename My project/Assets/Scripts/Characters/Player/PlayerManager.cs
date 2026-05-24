@@ -5,6 +5,7 @@ public class PlayerManager : CharacterManager
     [HideInInspector] public PlayerLocomotion playerLocomotion;
     [HideInInspector] public PlayerCombatManager playerCombatManager;
     [HideInInspector] public PlayerDamageReceiver playerDamageReceiver;
+    [HideInInspector] public PlayerStyleManager playerStyleManager;
 
     protected override void Awake()
     {
@@ -21,6 +22,12 @@ public class PlayerManager : CharacterManager
         if (playerDamageReceiver == null)
         {
             playerDamageReceiver = gameObject.AddComponent<PlayerDamageReceiver>();
+        }
+
+        playerStyleManager = GetComponent<PlayerStyleManager>();
+        if (playerStyleManager == null)
+        {
+            playerStyleManager = gameObject.AddComponent<PlayerStyleManager>();
         }
     }
 

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48a9fd1f12aa4a7a831f78bbad54bda7, type: 3}
+  m_Name: GameStartupSpawnConfiguration
+  m_EditorClassIdentifier: 
+  playerPrefab: {fileID: 3161145988312248387, guid: c9416bafb6d96a743856edd933e58290, type: 3}
+  enemyPrefab: {fileID: 3687193233744402046, guid: 0b6b97918921e5c4d9c6d9ab7129c12d, type: 3}
+  playerCameraPrefab: {fileID: 4501081033339370452, guid: 068654c84211b424197ed0c3a2ca71ef, type: 3}
+  playerInputManagerPrefab: {fileID: 6374429767474811185, guid: c8820315b1ea43e49a5d105e5cb4089e, type: 3}
+  playerSpawnPosition: {x: 0, y: 1, z: 0}
+  playerSpawnEulerAngles: {x: 0, y: 0, z: 0}
+  enemySpawnPosition: {x: 0, y: 1, z: 5}
+  enemySpawnEulerAngles: {x: 0, y: 180, z: 0}

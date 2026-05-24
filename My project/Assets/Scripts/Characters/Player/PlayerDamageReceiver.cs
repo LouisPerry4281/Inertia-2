@@ -10,6 +10,7 @@ public class PlayerDamageReceiver : MonoBehaviour, IDamageable
     [SerializeField] private bool isDead;
 
     private PlayerCombatManager combatManager;
+    private PlayerStyleManager styleManager;
     private float invulnerableUntil;
 
     public float CurrentHealth => currentHealth;
@@ -19,6 +20,7 @@ public class PlayerDamageReceiver : MonoBehaviour, IDamageable
     {
         currentHealth = maxHealth;
         combatManager = GetComponent<PlayerCombatManager>();
+        styleManager = GetComponent<PlayerStyleManager>();
     }
 
     public void TakeDamage(DamageInfo damageInfo)
@@ -34,6 +36,7 @@ public class PlayerDamageReceiver : MonoBehaviour, IDamageable
 
         currentHealth = Mathf.Max(0f, currentHealth - damageInfo.damage);
         invulnerableUntil = Time.time + hitInvulnerabilityTime;
+        styleManager?.RegisterDamageTaken();
 
         if (currentHealth <= 0f)
         {
