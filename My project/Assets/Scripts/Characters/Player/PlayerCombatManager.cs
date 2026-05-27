@@ -680,6 +680,8 @@ public class PlayerCombatManager : MonoBehaviour
             IDamageable damageable = hit.GetComponentInParent<IDamageable>();
             if (damageable == null || hitTargets.Contains(damageable))
                 continue;
+            
+            SoundManager.Instance.Play("Impact 1");
 
             hitTargets.Add(damageable);
             CharacterCombatTarget combatTarget = hit.GetComponentInParent<CharacterCombatTarget>();
