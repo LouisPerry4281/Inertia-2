@@ -56,6 +56,18 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    public void PlayRandom(string soundPrefix, int minIndex, int maxIndex)
+    {
+        if (maxIndex < minIndex)
+        {
+            Debug.LogWarning($"Invalid sound range for '{soundPrefix}': {minIndex} to {maxIndex}.");
+            return;
+        }
+
+        int index = Random.Range(minIndex, maxIndex + 1);
+        Play($"{soundPrefix} {index}");
+    }
+
     public void Stop(string soundName)
     {
         if (soundDictionary.TryGetValue(soundName, out Sound s))

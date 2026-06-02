@@ -557,28 +557,49 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   audioMixer: {fileID: 24100000, guid: 771c09320dde9d54d993ab1f95c36c45, type: 2}
   sounds:
-  - soundName: Impact 1
-    clip: {fileID: 8300000, guid: 45b15ecee532f9941969b5c268c0409c, type: 3}
+  - soundName: Weak Impact 1
+    clip: {fileID: 8300000, guid: 5d382ffd62774a0449357f9c09e65242, type: 3}
     volume: 1
     pitch: 1
     loop: 0
     mixerGroup: {fileID: 4397701318545239972, guid: 771c09320dde9d54d993ab1f95c36c45, type: 2}
     source: {fileID: 0}
-  - soundName: Impact 2
+  - soundName: Weak Impact 2
+    clip: {fileID: 8300000, guid: 933b1cc834dca1c4a94467076b3aaeeb, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    mixerGroup: {fileID: 4397701318545239972, guid: 771c09320dde9d54d993ab1f95c36c45, type: 2}
+    source: {fileID: 0}
+  - soundName: Weak Impact 3
+    clip: {fileID: 8300000, guid: 7be339e251df6f74f9f4b79f70670d1c, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    mixerGroup: {fileID: 4397701318545239972, guid: 771c09320dde9d54d993ab1f95c36c45, type: 2}
+    source: {fileID: 0}
+  - soundName: Strong Impact 1
+    clip: {fileID: 8300000, guid: 95acaa7da03f4c140af65e736e523565, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    mixerGroup: {fileID: 4397701318545239972, guid: 771c09320dde9d54d993ab1f95c36c45, type: 2}
+    source: {fileID: 0}
+  - soundName: Strong Impact 2
     clip: {fileID: 8300000, guid: 50aed464bd179f34f82dd00ed4689457, type: 3}
     volume: 1
     pitch: 1
     loop: 0
     mixerGroup: {fileID: 4397701318545239972, guid: 771c09320dde9d54d993ab1f95c36c45, type: 2}
     source: {fileID: 0}
-  - soundName: Impact 3
+  - soundName: Strong Impact 3
     clip: {fileID: 8300000, guid: 8cb074f2045eb9547b4f10de5b91ccaf, type: 3}
     volume: 1
     pitch: 1
     loop: 0
     mixerGroup: {fileID: 4397701318545239972, guid: 771c09320dde9d54d993ab1f95c36c45, type: 2}
     source: {fileID: 0}
-  - soundName: Impact 4
+  - soundName: Strong Impact 4
     clip: {fileID: 8300000, guid: 95acaa7da03f4c140af65e736e523565, type: 3}
     volume: 1
     pitch: 1

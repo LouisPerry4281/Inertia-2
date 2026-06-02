@@ -379,6 +379,7 @@ public class PlayerCombatManager : MonoBehaviour
         ComboAttack attack = GetNextAttack(requestedType);
         bool isAerialAttack = attack.aerial;
         bool isDashAttack = attack.dash;
+        bool attackSoundPlayed = false;
         if (isAerialAttack)
         {
             aerialChainCount = Mathf.Clamp(aerialChainCount + 1, 1, GetMaxAerialChainCount());
@@ -430,7 +431,11 @@ public class PlayerCombatManager : MonoBehaviour
         float activeUntil = Time.time + attack.activeTime;
         while (Time.time < activeUntil)
         {
-            DetectHits(attack);
+            if (!attackSoundPlayed && DetectHits(attack))
+            {
+                PlayAttackSound(attack);
+                attackSoundPlayed = true;
+            }
             yield return null;
         }
 
@@ -457,6 +462,20 @@ public class PlayerCombatManager : MonoBehaviour
         isInAerialFollowUp = false;
         activeDashTarget = null;
         activeAction = null;
+    }
+
+    private void PlayAttackSound(ComboAttack attack)
+    {
+        if (SoundManager.Instance == null)
+            return;
+
+        if (attack.type == AttackType.Heavy)
+        {
+            SoundManager.Instance.PlayRandom("Strong Impact", 1, 4);
+            return;
+        }
+
+        SoundManager.Instance.PlayRandom("Weak Impact", 1, 3);
     }
 
     private ComboAttack GetNextAttack(AttackType requestedType)
@@ -666,11 +685,12 @@ public class PlayerCombatManager : MonoBehaviour
         }
     }
 
-    private void DetectHits(ComboAttack attack)
+    private bool DetectHits(ComboAttack attack)
     {
         Vector3 hitCenter = GetHitCenter(attack);
         float hitRadius = GetHitRadius(attack);
         Collider[] hits = Physics.OverlapSphere(hitCenter, hitRadius, damageableLayers, QueryTriggerInteraction.Collide);
+        bool hitEnemy = false;
 
         foreach (Collider hit in hits)
         {
@@ -680,8 +700,6 @@ public class PlayerCombatManager : MonoBehaviour
             IDamageable damageable = hit.GetComponentInParent<IDamageable>();
             if (damageable == null || hitTargets.Contains(damageable))
                 continue;
-            
-            SoundManager.Instance.Play("Impact 1");
 
             hitTargets.Add(damageable);
             CharacterCombatTarget combatTarget = hit.GetComponentInParent<CharacterCombatTarget>();
@@ -707,6 +725,11 @@ public class PlayerCombatManager : MonoBehaviour
                 RequiresBrokenArmorForStagger(attack),
                 GetStunDuration(attack),
                 attack.finisher));
+
+            if (combatTarget != null)
+            {
+                hitEnemy = true;
+            }
 
             if (PlayerJuiceManager.instance != null)
             {
@@ -745,6 +768,8 @@ public class PlayerCombatManager : MonoBehaviour
                 StartCoroutine(ApplyHitStop(hitStop));
             }
         }
+
+        return hitEnemy;
     }
 
     private Vector3 GetHitCenter(ComboAttack attack)
